@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxdemo
+  namespace: nginx-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: nginxdemo
+  template:
+    metadata:
+      labels:
+        run: nginxdemo
+    spec:
+      containers:
+      - image: nginxdemos/hello
+        name: nginx
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10

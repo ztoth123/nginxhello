@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-staging
+  namespace: nginx-deploy
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: 'ztoth123@gmail.com'
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    http01: {}  
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: nginx-deploy
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 'ztoth123@gmail.com'
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    http01: {}

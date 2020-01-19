@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: nginxdemo
+  name: nginxdemo-service
+  namespace: nginx-deploy
+spec:
+  ports:
+  - port: 6000
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: nginxdemo
+  sessionAffinity: None
+  type: NodePort

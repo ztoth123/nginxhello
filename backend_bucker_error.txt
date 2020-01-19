@@ -1,0 +1,9 @@
+Initializing the backend...
+
+Error: Error inspecting states in the "gcs" backend:
+    querying Cloud Storage failed: googleapi: Error 403: devops-assignment@evbox-infrastructure.iam.gserviceaccount.com does not have storage.objects.list access to devops-assignment., forbidden
+
+Prior to changing backends, Terraform inspects the source and destination
+states to determine what kind of migration steps need to be taken, if any.
+Terraform failed to load the states. The data in both the source and the
+destination remain unmodified. Please resolve the above error and try again.

@@ -1,0 +1,33 @@
+0. K8s Deployment and ClusterIP service objects are installed
+-------------------------------------------------------------
+1. Create a static IP address for the GCP project will be used in Ingress k8s object
+-----------------------------------------------------------------------------------
+gcloud compute addresses create static-ip-1 --region europe-west1
+gcloud compute addresses list
+
+2. Register a subdomain and an A record in the subdomain pointing to the static IP
+----------------------------------------------------------------------------------
+A record: nginx.everon.dns-cloud.net --> 34.76.213.215
+ 
+3. Create a namespace for cert-manager
+--------------------------------------
+kubectl create namespace cert-manager
+
+4. On GKE, create a clusterrolebinding for my user
+--------------------------------------------------
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole=cluster-admin \
+  --user=$(gcloud config get-value core/account)
+
+5. Install the CustomResourceDefinitions and cert-manager itself
+----------------------------------------------------------------
+kubectl apply --validate=false -f \
+https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+
+6. Verifying the installation
+-----------------------------
+kubectl get pods --namespace cert-manager 
+
+7. Create and apply .yaml for Letsencrypt staging and prod (Cluster)Issuers
+---------------------------------------------------------------------------
+kubectl apply -f ClusterIssuers.yaml 
