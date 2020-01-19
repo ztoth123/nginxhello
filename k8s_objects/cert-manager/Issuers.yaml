@@ -9,7 +9,10 @@ spec:
     email: 'ztoth123@gmail.com'
     privateKeySecretRef:
       name: letsencrypt-staging
-    http01: {}  
+    solvers:
+    - http01:
+        ingress:
+          class: gce
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
@@ -22,4 +25,7 @@ spec:
     email: 'ztoth123@gmail.com'
     privateKeySecretRef:
       name: letsencrypt-prod
-    http01: {}
+    solvers:
+    - http01:
+        ingress:
+          class: gce

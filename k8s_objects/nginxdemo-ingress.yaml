@@ -4,12 +4,12 @@ metadata:
   name: my-ingress-1
   namespace: nginx-deploy
   annotations:
-#    kubernetes.io/ingress.class: "gce"
+#    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: static-ip-1
     kubernetes.io/ingress.allow-http: "true"
     cert-manager.io/issuer: letsencrypt-prod
-#    acme.cert-manager.io/http01-ingress-class: "gce"
     acme.cert-manager.io/http01-edit-in-place: "true"
+#    acme.cert-manager.io/http01-ingress-class: gce
 spec:
   tls:
   - hosts:
