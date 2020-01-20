@@ -60,8 +60,10 @@
 - `gcloud auth activate-service-account devops-assignment@evbox-infrastructure.iam.gserviceaccount.com --key-file=e0905a2dcabe.json --project=evbox-infrastructure`
 2. Set the local `kubectl` parameters into the `~/.kube/config` file for later `local-exec` `kubectl` commands:
 - `gcloud container clusters get-credentials ${google_container_cluster.primary.name} --zone=europe-west1-d`
-3. Created a global GCP static IP entry for the ingress VIP: 
-- `gcloud compute addresses create static-ip-1 --global'
+3. Created a global GCP static IP entry for the ingress VIP:
+- `gcloud compute addresses create static-ip-1 --global`
+
+Note: Explicit dependency on `google_container_cluster.primary` resource is defined!
 
 ##### Cert-manager installation
 - `kubectl create namespace cert-manager`
@@ -69,3 +71,5 @@
 - `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)`
 - `kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml`
 - `kubectl apply -f cert-manager-issuers.yaml`
+
+Note: Explicit dependency on `null_resource.gcloud_commands` resource is defined!
