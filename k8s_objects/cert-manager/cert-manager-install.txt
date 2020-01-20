@@ -2,12 +2,12 @@
 -------------------------------------------------------------
 1. Create a static IP address for the GCP project will be used in Ingress k8s object
 -----------------------------------------------------------------------------------
-gcloud compute addresses create static-ip-1 --region europe-west1
+gcloud compute addresses create static-ip-1 --global
 gcloud compute addresses list
 
 2. Register a subdomain and an A record in the subdomain pointing to the static IP
 ----------------------------------------------------------------------------------
-A record: nginx.everon.dns-cloud.net --> 34.76.213.215
+A record: nginx.everon.dns-cloud.net --> 34.107.232.107
  
 3. Create a namespace for cert-manager
 --------------------------------------

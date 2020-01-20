@@ -15,6 +15,11 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.everon-k8s-cluster.cluster_ca_certificate)
 }
 
+
+module "everon-k8s-cluster" {
+  source                     = "./modules"
+}
+
 resource "kubernetes_namespace" "nginx-deploy" {
   metadata {
     name = "nginx-deploy"
@@ -23,8 +28,4 @@ resource "kubernetes_namespace" "nginx-deploy" {
       label = "nginx"
     }
   }
-}
-
-module "everon-k8s-cluster" {
-  source                     = "./modules"
 }

@@ -26,4 +26,24 @@ z@znote:~/Documents/Lunatech/01_setup_infra$ gcloud compute addresses list
 NAME         ADDRESS/RANGE  TYPE      PURPOSE  NETWORK  REGION        SUBNET  STATUS
 static-ip-1  34.76.213.215  EXTERNAL                    europe-west1          RESERVED
 
+6. Change gcloud forwarding-rule for http to https redirect
+-----------------------------------------------------------
+z@znote:~/Documents/Everon$ gcloud compute forwarding-rules list | grep 'NAME\|nginx-deploy'
+NAME                                                 REGION        IP_ADDRESS      IP_PROTOCOL  TARGET
+k8s-fw-nginx-deploy-my-ingress-1--e0030516402ffaeb                 34.107.232.107  TCP          k8s-tp-nginx-deploy-my-ingress-1--e0030516402ffaeb
+k8s-fws-nginx-deploy-my-ingress-1--e0030516402ffaeb                34.107.232.107  TCP          k8s-tps-nginx-deploy-my-ingress-1--e0030516402ffaeb
+
+z@znote:~/Documents/Everon$ gcloud compute forwarding-rules describe k8s-fw-nginx-deploy-my-ingress-1--e0030516402ffaeb --global
+IPAddress: 34.107.232.107
+IPProtocol: TCP
+creationTimestamp: '2020-01-19T06:21:26.705-08:00'
+description: '{"kubernetes.io/ingress-name": "nginx-deploy/my-ingress-1"}'
+id: '2296509476205353737'
+kind: compute#forwardingRule
+loadBalancingScheme: EXTERNAL
+name: k8s-fw-nginx-deploy-my-ingress-1--e0030516402ffaeb
+networkTier: PREMIUM
+portRange: 80-80
+selfLink: https://www.googleapis.com/compute/v1/projects/evbox-infrastructure/global/forwardingRules/k8s-fw-nginx-deploy-my-ingress-1--e0030516402ffaeb
+target: https://www.googleapis.com/compute/v1/projects/evbox-infrastructure/global/targetHttpProxies/k8s-tp-nginx-deploy-my-ingress-1--e0030516402ffaeb
 
