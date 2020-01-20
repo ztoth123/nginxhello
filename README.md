@@ -107,5 +107,5 @@ client ├──> VIP:          |  ingress  |──>| service  |
 
 ```
 
-The service is available here:
+The microservice is available here:
 https://nginx.everon.dns-cloud.net
