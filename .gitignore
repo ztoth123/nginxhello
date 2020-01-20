@@ -4,3 +4,4 @@ kubectl
 google_kubernetes_providers_modules_outputs.txt
 e0905a2dcabe.json
 terraform.tfvars
+gcloud_commands.txt
