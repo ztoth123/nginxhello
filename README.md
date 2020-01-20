@@ -29,5 +29,14 @@
 4. GKE `ingress-gce` k8s ingress controller (+ automatically added GCP services: ssl, tp, um, fw, fws, tps)
 
 ### Terraform module structure and files
+```
+├── main.tf
+├── variables.tf
+├── ...
+├── modules/
+    ├── variables.tf
+    ├── main.tf
+    ├── outputs.tf
+```
 
 ### Terraform provisioned resource list
