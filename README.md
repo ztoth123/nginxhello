@@ -96,7 +96,7 @@ Notes:
 
 Notes: 
 - Implicit dependency is defined by the provider authentication child module output references
-- An A record is created manually under the also manually pre-registered `everon.dns-cloud.net` subdomain
+- An A record is created manually(after the global static IP became known) under the also manually pre-registered `everon.dns-cloud.net` subdomain:
   A record: `nginx` --> `34.107.232.107`
   
 ### The DNS and data flow from an Internet client to the `nginxdemos/hello` microservice
