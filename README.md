@@ -39,7 +39,7 @@
     ├── outputs.tf
 ```
 
-### How to use the provided Terraform files
+### The provisioning process by the Terraform files
 ##### Download the `google` and the `kubernetes` terraform modules
 1. Run the `terraform init` command to download the 2 provider modules defined in the root `main.tf` file
 
@@ -54,5 +54,18 @@
    These output values are used as input values by the parent defined `main.tf` `kubernetes` provider for authentication.
 
 ##### Additional settings on GCP
-1. setting authentication for the `gcloud` tool by resource `"null_resource" "gcloud_commands"` `local-exec` commands:
+1. Set the authentication for the `gcloud` tool by resource `"null_resource" "gcloud_commands"` `local-exec` commands:
+- `gcloud config set project evbox-infrastructure`
+- `gcloud config set compute/zone europe-west1-d`
+- `gcloud auth activate-service-account devops-assignment@evbox-infrastructure.iam.gserviceaccount.com --key-file=e0905a2dcabe.json --project=evbox-infrastructure`
+2. Set the local `kubectl` parameters into the `~/.kube/config` file for later `local-exec` `kubectl` commands:
+- `gcloud container clusters get-credentials ${google_container_cluster.primary.name} --zone=europe-west1-d`
+3. Created a global GCP static IP entry for the ingress VIP: 
+- `gcloud compute addresses create static-ip-1 --global'
 
+##### Cert-manager installation
+- `kubectl create namespace cert-manager`
+- `kubectl create namespace nginx-deploy`
+- `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)`
+- `kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml`
+- `kubectl apply -f cert-manager-issuers.yaml`
