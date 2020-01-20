@@ -94,8 +94,11 @@ Notes:
   This ingress is a L7 load-balancer configuration for TLS and using the cert-manager to ask for Letsencrypt certificate.
   The initial and the Letsencrypt ACME issued certificates are stored in the `tls-secret-1` secret.
 
-Note: Implicit dependency is defined by the provider authentication child module output references
-
+Notes: 
+- Implicit dependency is defined by the provider authentication child module output references
+- An A record is created manually under the also manually pre-registered `everon.dns-cloud.net` subdomain
+  A record: `nginx` --> `34.107.232.107`
+  
 ### The DNS and data flow from an Internet client to the `nginxdemos/hello` microservice
 ```
   ├ ─ ─> DNS server: nginx.everon.dns-cloud.net > 34.107.232.107 
