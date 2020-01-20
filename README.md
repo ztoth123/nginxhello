@@ -40,10 +40,14 @@
 ```
 
 ### The provisioning process by the Terraform files
-##### Download the `google` and the `kubernetes` terraform modules
+##### terraform commands to use
 1. Run the `terraform init` command to download the 2 provider modules defined in the root `main.tf` file
+2. Use the `terraform plan -out=output1` command to create the plan file for the infrastructure
+3. Apply the `terraform apply "output1"` command to provision IAAC and generate the `terraform.state` file
 
-##### Create a k8s cluster
+Note: the `terraform apply "output1"` command executing the following configurations steps on the GCP
+
+##### step1: Creating a k8s cluster
 1. The `google` provider module uses the `evbox-infrastructure` project with the `e0905a2dcabe.json` file
    content to authenticate itself into GCP
 2. The `google` provider module provisions the the `modules/main.tf`
@@ -53,23 +57,37 @@
 4. The `modules/output.tf` file defined output values are populated from the `google_container_cluster.primary` resource.
    These output values are used as input values by the parent defined `main.tf` `kubernetes` provider for authentication.
 
-##### Additional settings on GCP
-1. Set the authentication for the `gcloud` tool by resource `"null_resource" "gcloud_commands"` `local-exec` commands:
+##### step2: Additional settings on GCP
+1. Setting the authentication for the `gcloud` tool by resource `"null_resource" "gcloud_commands"` `local-exec` commands:
 - `gcloud config set project evbox-infrastructure`
 - `gcloud config set compute/zone europe-west1-d`
 - `gcloud auth activate-service-account devops-assignment@evbox-infrastructure.iam.gserviceaccount.com --key-file=e0905a2dcabe.json --project=evbox-infrastructure`
-2. Set the local `kubectl` parameters into the `~/.kube/config` file for later `local-exec` `kubectl` commands:
+2. Setting the local `kubectl` parameters into the `~/.kube/config` file for later `local-exec` `kubectl` commands:
 - `gcloud container clusters get-credentials ${google_container_cluster.primary.name} --zone=europe-west1-d`
-3. Created a global GCP static IP entry for the ingress VIP:
+3. Creating a global GCP static IP entry for the ingress VIP:
 - `gcloud compute addresses create static-ip-1 --global`
 
 Note: Explicit dependency on `google_container_cluster.primary` resource is defined!
 
-##### Cert-manager installation
+##### step3: Cert-manager installation
 - `kubectl create namespace cert-manager`
 - `kubectl create namespace nginx-deploy`
 - `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)`
 - `kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml`
 - `kubectl apply -f cert-manager-issuers.yaml`
 
-Note: Explicit dependency on `null_resource.gcloud_commands` resource is defined!
+Notes: 
+- Explicit dependency on `null_resource.gcloud_commands` resource is defined!
+- cert-manager is installed in the `cert-manager` namespace
+- `nginx-deploy` namespace is configured here as the cert-manager `Issuer` is namespace-aware
+
+##### step4: K8s resource installation in the `nginx-deploy` namespace
+1. the `kubernetes` provider using the child module provided output values for authentication
+2. the following k8s objects are provisioned by the root `main.tf` kubernetes resources:
+- Deployment with 2 replicas with using the `nginxdemos/hello` Docker image in each
+- Nodeport Service for cluster inside load-balancing from other pods
+- Ingress object referring to the Nodeport service as backend and using the predefined static IP as frontend VIP
+  This ingress is a L7 load-balancer configuration for TLS and using the cert-manager to ask for Letsencrypt certificate.
+  The initial and the Letsencrypt ACME issued certificates are stored in the `tls-secret-1` secret.
+
+Note: Implicit dependency is defined by the provider authentication child module output references
