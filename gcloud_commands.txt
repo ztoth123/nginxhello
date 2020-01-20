@@ -21,7 +21,7 @@ gcloud container clusters list
 
 5. create a static public IP address
 ------------------------------------
-gcloud compute addresses create static-ip-1 --region europe-west1
+gcloud compute addresses create static-ip-1 --global
 z@znote:~/Documents/Lunatech/01_setup_infra$ gcloud compute addresses list 
 NAME         ADDRESS/RANGE  TYPE      PURPOSE  NETWORK  REGION        SUBNET  STATUS
 static-ip-1  34.76.213.215  EXTERNAL                    europe-west1          RESERVED
