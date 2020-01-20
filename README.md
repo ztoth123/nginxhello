@@ -39,4 +39,20 @@
     ├── outputs.tf
 ```
 
-### Terraform provisioned resource list
+### How to use the provided Terraform files
+##### Download the `google` and the `kubernetes` terraform modules
+1. Run the `terraform init` command to download the 2 provider modules defined in the root `main.tf` file
+
+##### Create a k8s cluster
+1. The `google` provider module uses the `evbox-infrastructure` project with the `e0905a2dcabe.json` file
+   content to authenticate itself into GCP
+2. The `google` provider module provisions the the `modules/main.tf`
+   file defined `primary_preemptible_nodes` node-pool resource on GCE 
+3. The `google` provider module provisions the the `modules/main.tf`
+   file defined `primary` cluster named `ztoth-k8s-cluster`
+4. The `modules/output.tf` file defined output values are populated from the `google_container_cluster.primary` resource.
+   These output values are used as input values by the parent defined `main.tf` `kubernetes` provider for authentication.
+
+##### Additional settings on GCP
+1. setting authentication for the `gcloud` tool by resource `"null_resource" "gcloud_commands"` `local-exec` commands:
+
