@@ -12,7 +12,11 @@
 
 ## Questions!
 1. What is your favourite feature that GCP or it 's competitor has recently brought to market, and how are you intending to use it ?
+I would like to use all of the 3 main cloud providers' services, no faovourite feature I have.
+
 2. What future or current technology do you look forward to the most or want to use and why?
+https://www.consul.io/ as it is an interesting and platform independent networking solution for inter-cluster or inter-cloud pod communication.
+And I was originally a network engineer:)
 
 ## Solution
 ### Prerequisites
@@ -91,3 +95,17 @@ Notes:
   The initial and the Letsencrypt ACME issued certificates are stored in the `tls-secret-1` secret.
 
 Note: Implicit dependency is defined by the provider authentication child module output references
+
+### The DNS and data flow from an Internet client to the `nginxdemos/hello` microservice
+```
+  ├ ─ ─> DNS server: nginx.everon.dns-cloud.net > 34.107.232.107 
+  |
+  |                       |───────────|   |──────────|────> nginx pod
+client ├──> VIP:          |  ingress  |──>| service  |
+           34.107.232.107 |───────────|   |──────────|────> nginx pod
+
+
+```
+
+The service is available here:
+https://nginx.everon.dns-cloud.net
