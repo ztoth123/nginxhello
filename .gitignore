@@ -4,4 +4,6 @@ kubectl
 google_kubernetes_providers_modules_outputs.txt
 e0905a2dcabe.json
 terraform.tfvars
+terraform.tfstate*
 gcloud_commands.txt
+Everon_-_DevOps_Assignment.pdf
